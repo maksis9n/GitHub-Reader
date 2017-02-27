@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Github reader</string>
+    <string name="button_search">Поиск</string>
+    <string name="textViewTypeRepositories">Тип репозитория:</string>
+    <string name="textViewNameUser">Имя пользователя</string>
+    <string name="textViewLastQuery">Последние запросы:</string>
+    <string name="title_result_activity">Repositories</string>
+</resources>

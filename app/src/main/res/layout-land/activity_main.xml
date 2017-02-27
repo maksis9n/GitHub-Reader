@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_view_name_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="27dp"
+        android:text="@string/textViewNameUser"/>
+
+    <EditText
+        android:id="@+id/edit_text_name_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_view_name_user"
+        android:layout_alignBottom="@+id/text_view_name_user"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/text_view_name_user"
+        android:layout_toRightOf="@+id/text_view_name_user"
+        android:ems="9"
+        android:inputType="textPersonName"/>
+
+    <Button
+        android:id="@+id/button_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/text_view_name_user"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp"
+        android:layout_toEndOf="@+id/edit_text_name_user"
+        android:layout_toRightOf="@+id/edit_text_name_user"
+        android:text="@string/button_search"/>
+
+    <Spinner
+        android:id="@+id/spinner_type_repositories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text_view_type_repositories"
+        android:layout_alignLeft="@+id/edit_text_name_user"
+        android:layout_alignStart="@+id/edit_text_name_user"/>
+
+    <TextView
+        android:id="@+id/text_view_type_repositories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text_view_name_user"
+        android:layout_alignStart="@+id/text_view_name_user"
+        android:layout_below="@+id/button_search"
+        android:text="@string/textViewTypeRepositories"/>
+
+    <TextView
+        android:id="@+id/text_view_last_query"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_type_repositories"
+        android:layout_marginTop="23dp"
+        android:layout_toLeftOf="@+id/spinner_type_repositories"
+        android:layout_toStartOf="@+id/spinner_type_repositories"
+        android:text="@string/textViewLastQuery"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/button_search"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/button_search"
+        android:layout_marginEnd="49dp"
+        android:layout_marginRight="49dp"
+        android:layout_toEndOf="@+id/text_view_type_repositories"
+        android:layout_toRightOf="@+id/text_view_type_repositories"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/history_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="123dp"
+            android:layout_alignEnd="@+id/button_search"
+            android:layout_alignLeft="@+id/spinner_type_repositories"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/button_search"
+            android:layout_alignStart="@+id/spinner_type_repositories"
+            android:layout_marginBottom="17dp"
+            android:layout_marginEnd="38dp"
+            android:layout_marginRight="38dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
