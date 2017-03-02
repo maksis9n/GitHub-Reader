@@ -1,4 +1,4 @@
-package maksis9n.com.test_github_reader.dateBase;
+package maksis9n.com.test_github_reader.DateBase;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 
@@ -8,6 +8,6 @@ import com.raizlabs.android.dbflow.annotation.Database;
 @Database(name = DataBase.NAME, version = DataBase.VERSION)
 public class DataBase {
     public static final String NAME = "DataBase";
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 }
 

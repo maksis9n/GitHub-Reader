@@ -1,4 +1,4 @@
-package maksis9n.com.test_github_reader.dateBase;
+package maksis9n.com.test_github_reader.DateBase;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
@@ -27,10 +27,10 @@ public class QueryResults extends BaseModel {
     String description;
 
     @Column
-    Date createdAt;
+    String createdAt;
 
     @Column
-    Date updateAt;
+    String updateAt;
 
     @Column
     String stargazersCount;
@@ -69,19 +69,19 @@ public class QueryResults extends BaseModel {
         this.description = description;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdateAt() {
+    public String getUpdateAt() {
         return updateAt;
     }
 
-    public void setUpdateAt(Date updateAt) {
+    public void setUpdateAt(String updateAt) {
         this.updateAt = updateAt;
     }
 

@@ -4,43 +4,44 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/list_item_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Имя"/>
+    <TextView
+        android:id="@+id/list_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Имя"/>
 
-        <TextView
-            android:id="@+id/list_item_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Описание"/>
+    <TextView
+        android:id="@+id/list_item_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Описание"/>
 
-        <TextView
-            android:id="@+id/list_item_created_at"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Дата создания"/>
+    <TextView
+        android:id="@+id/list_item_created_at"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Дата создания"/>
 
-        <TextView
-            android:id="@+id/list_item_update_at"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Дата обвноления"/>
+    <TextView
+        android:id="@+id/list_item_update_at"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Дата обвноления"/>
 
-        <TextView
-            android:id="@+id/list_item_stargazers_count"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Количество звезд"/>
+    <TextView
+        android:id="@+id/list_item_stargazers_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Количество звезд"/>
 
-        <TextView
-            android:id="@+id/list_item_language"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Язык"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:background="@drawable/circuit"
-            android:layout_height="1dp"/>
+    <TextView
+        android:id="@+id/list_item_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Язык"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/circuit"/>
 </LinearLayout>

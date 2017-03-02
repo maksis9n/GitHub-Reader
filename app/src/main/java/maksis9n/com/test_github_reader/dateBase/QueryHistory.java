@@ -1,4 +1,4 @@
-package maksis9n.com.test_github_reader.dateBase;
+package maksis9n.com.test_github_reader.DateBase;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;

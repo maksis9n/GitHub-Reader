@@ -1,5 +1,7 @@
 package maksis9n.com.test_github_reader;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,10 +12,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.raizlabs.android.dbflow.sql.language.Select;
+
+import java.util.List;
+
+import maksis9n.com.test_github_reader.DateBase.QueryResults;
+import maksis9n.com.test_github_reader.DateBase.QueryResults_Table;
+
 public class ResultActivity extends AppCompatActivity {
 
     private RecyclerView resultRecyclerView;
     private ResultAdapter resultAdapter;
+    private List<QueryResults> queryResultsList;
+
+    private static final String EXTRA_ID =
+            "maksis9n.com.criminalintent.extraid";
+
+    public static Intent newIntent(Context packagecontext, int extraId) {
+        Intent intent = new Intent(packagecontext, ResultActivity.class);
+        intent.putExtra(EXTRA_ID, extraId);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +41,18 @@ public class ResultActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        int extraId = (int) getIntent().getSerializableExtra(EXTRA_ID);
+
+        queryResultsList = new Select()
+                .from(QueryResults.class)
+                .where(QueryResults_Table.queryHistory_id.eq(extraId))
+                .queryList();
+
         resultRecyclerView = (RecyclerView) findViewById(R.id.result_recycler_view);
         resultRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         resultAdapter = new ResultAdapter();
         resultRecyclerView.setAdapter(resultAdapter);
+
     }
 
 
@@ -62,17 +89,17 @@ public class ResultActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ResultHolder holder, int position) {
-            holder.name.setText("name");
-            holder.description.setText("descr");
-            holder.createdAt.setText("123");
-            holder.updateAt.setText("666");
-            holder.stargazersCount.setText(" 64564");
-            holder.language.setText("java");
+            holder.name.setText(queryResultsList.get(position).getName());
+            holder.description.setText(queryResultsList.get(position).getDescription());
+            holder.createdAt.setText(queryResultsList.get(position).getCreatedAt());
+            holder.updateAt.setText(queryResultsList.get(position).getUpdateAt());
+            holder.stargazersCount.setText(queryResultsList.get(position).getStargazersCount());
+            holder.language.setText(queryResultsList.get(position).getLanguage());
         }
 
         @Override
         public int getItemCount() {
-            return 4;
+            return queryResultsList.size();
         }
     }
 }
