@@ -26,12 +26,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import maksis9n.com.test_github_reader.DateBase.QueryHistory;
 import maksis9n.com.test_github_reader.DateBase.QueryHistory_Table;
@@ -79,32 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 InitializationData();
-                boolean notFound = true;
-                List<QueryHistory> queryHistoryList = new Select()
-                        .from(QueryHistory.class)
-                        .where(QueryHistory_Table.nameUser.eq(login))
-                        .and(QueryHistory_Table.typeRepository.eq(type))
-                        .queryList();
-                if (queryHistoryList.size() == 0) {
-                    newThread();
-                    notFound = false;
-                }
-
-                Date curretDate = Calendar.getInstance().getTime();
-                Date requestDate;
-                long tmp;
-
-                for (int i = 0; i < queryHistoryList.size(); i++) {
-                    requestDate = queryHistoryList.get(i).getTimeRequest();
-                    tmp = ((curretDate.getTime() - requestDate.getTime()) / 1000) / 60;
-                    if (tmp < 5) {
-                        Intent intent = ResultActivity.newIntent(MainActivity.this, queryHistoryList.get(i).getId());
-                        startActivity(intent);
-                        notFound = false;
-                        break;
-                    }
-                }
-                if (notFound) newThread();
+                CreateListRepositories(login, type);
             }
         });
     }
@@ -167,13 +139,6 @@ public class MainActivity extends AppCompatActivity {
             }
             Intent intent = ResultActivity.newIntent(MainActivity.this, queryHistory.getId());
             startActivity(intent);
-            /*Intent intent = new Intent(getBaseContext(), RezultActivity.class);
-            final List<History> histories = new Select().from(History.class).queryList();
-            final List<Cache> Cache = new Select().from(Cache.class).queryList();
-            long date=histories.get(histories.size()-1).getTimeRequest().getTime();
-            intent.putExtra(getString(R.string.transfer_date),(long) 1);
-            mAdapter.notifyDataSetChanged();
-            startActivity(intent);*/
         }
 
         @Override
@@ -202,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void newThread() {
+    private void NewThread() {
         InitializationData();
         queryHistory = new QueryHistory();
         queryHistory.setNameUser(login);
@@ -211,8 +176,49 @@ public class MainActivity extends AppCompatActivity {
         queryHistory.setTimeRequest(curretDate);
         queryHistory.save();
 
+        historyRecyclerView.getAdapter().notifyDataSetChanged();
+
         new RetrieveFeedTask().execute();
 
+    }
+
+    private void CreateListRepositories(String username, String typeRep) {
+        boolean notFound = true;
+        List<QueryHistory> queryHistoryList = new Select()
+                .from(QueryHistory.class)
+                .where(QueryHistory_Table.nameUser.eq(username))
+                .and(QueryHistory_Table.typeRepository.eq(typeRep))
+                .queryList();
+        if (queryHistoryList.size() == 0) {
+            NewThread();
+            notFound = false;
+        }
+
+        Date curretDate = Calendar.getInstance().getTime();
+        Date requestDate;
+        long tmp;
+
+        for (int i = 0; i < queryHistoryList.size(); i++) {
+            requestDate = queryHistoryList.get(i).getTimeRequest();
+            tmp = ((curretDate.getTime() - requestDate.getTime()) / 1000) / 60;
+            if (tmp < 5) {
+                Intent intent = ResultActivity.newIntent(MainActivity.this, queryHistoryList.get(i).getId());
+
+                QueryHistory queryHistoryTmp = new QueryHistory();
+                queryHistoryTmp.setNameUser(queryHistoryList.get(i).getNameUser());
+                queryHistoryTmp.setTypeRepository(queryHistoryList.get(i).getTypeRepository());
+                Date date = (Date) Calendar.getInstance().getTime();
+                queryHistoryTmp.setTimeRequest(date);
+                queryHistoryTmp.save();
+
+                historyRecyclerView.getAdapter().notifyDataSetChanged();
+
+                startActivity(intent);
+                notFound = false;
+                break;
+            }
+        }
+        if (notFound) NewThread();
     }
 
     private class HistoryHolder extends RecyclerView.ViewHolder {
@@ -237,7 +243,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(HistoryHolder holder, int position) {
+        public void onBindViewHolder(final HistoryHolder holder, final int position) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    QueryHistory tmpHistory = new Select()
+                            .from(QueryHistory.class)
+                            .where(QueryHistory_Table.nameUser.eq(holder.nameUserTextView.getText().toString()))
+                            .and(QueryHistory_Table.typeRepository.eq(holder.typeRepositoriesTextView.getText().toString()))
+                            .querySingle();
+
+                    CreateListRepositories(tmpHistory.getNameUser(), tmpHistory.getTypeRepository());
+                }
+            });
             List<QueryHistory> queryHistory = new Select().from(QueryHistory.class).orderBy(QueryHistory_Table.id, false).limit(2).queryList();
             if (queryHistory.size() == 2) {
                 holder.nameUserTextView.setText(queryHistory.get(position).getNameUser().toString());
@@ -251,7 +269,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
 
         @Override
         public int getItemCount() {

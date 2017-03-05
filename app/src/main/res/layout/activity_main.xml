@@ -8,7 +8,7 @@
     tools:context="maksis9n.com.test_github_reader.MainActivity">
 
     <TextView
-        android:text="@string/textViewNameUser"
+        android:text="@string/text_view_name_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="27dp"
@@ -20,7 +20,7 @@
         android:layout_marginTop="27dp"/>
 
     <TextView
-        android:text="@string/textViewTypeRepositories"
+        android:text="@string/text_view_type_repositories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -75,7 +75,7 @@
     </android.support.v7.widget.RecyclerView>
 
     <TextView
-        android:text="@string/textViewLastQuery"
+        android:text="@string/text_view_last_query"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button_search"

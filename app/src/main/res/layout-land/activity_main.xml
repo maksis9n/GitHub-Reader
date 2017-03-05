@@ -13,7 +13,7 @@
         android:layout_marginLeft="27dp"
         android:layout_marginStart="27dp"
         android:layout_marginTop="27dp"
-        android:text="@string/textViewNameUser"/>
+        android:text="@string/text_view_name_user"/>
 
     <EditText
         android:id="@+id/edit_text_name_user"
@@ -54,7 +54,7 @@
         android:layout_alignLeft="@+id/text_view_name_user"
         android:layout_alignStart="@+id/text_view_name_user"
         android:layout_below="@+id/button_search"
-        android:text="@string/textViewTypeRepositories"/>
+        android:text="@string/text_view_type_repositories"/>
 
     <TextView
         android:id="@+id/text_view_last_query"
@@ -64,7 +64,7 @@
         android:layout_marginTop="23dp"
         android:layout_toLeftOf="@+id/spinner_type_repositories"
         android:layout_toStartOf="@+id/spinner_type_repositories"
-        android:text="@string/textViewLastQuery"/>
+        android:text="@string/text_view_last_query"/>
 
     <LinearLayout
         android:layout_width="match_parent"

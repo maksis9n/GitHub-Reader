@@ -2,18 +2,21 @@ package maksis9n.com.test_github_reader;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import maksis9n.com.test_github_reader.DateBase.QueryResults;
@@ -55,6 +58,33 @@ public class ResultActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.result_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle() == getString(R.string.setting_date_ascending)) {
+            Collections.sort(queryResultsList, DateAscending);
+            resultRecyclerView.getAdapter().notifyDataSetChanged();
+            return true;
+        } else if (item.getTitle() == getString(R.string.setting_date_descending)) {
+            Collections.sort(queryResultsList, DateDescending);
+            resultRecyclerView.getAdapter().notifyDataSetChanged();
+            return true;
+        } else if (item.getTitle() == getString(R.string.setting_name_ascending)) {
+            Collections.sort(queryResultsList, NameAscending);
+            resultRecyclerView.getAdapter().notifyDataSetChanged();
+            return true;
+        } else if (item.getTitle() == getString(R.string.setting_name_descending)) {
+            Collections.sort(queryResultsList, NameDescending);
+            resultRecyclerView.getAdapter().notifyDataSetChanged();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private class ResultHolder extends RecyclerView.ViewHolder {
 
@@ -89,12 +119,12 @@ public class ResultActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ResultHolder holder, int position) {
-            holder.name.setText(queryResultsList.get(position).getName());
-            holder.description.setText(queryResultsList.get(position).getDescription());
-            holder.createdAt.setText(queryResultsList.get(position).getCreatedAt());
-            holder.updateAt.setText(queryResultsList.get(position).getUpdateAt());
-            holder.stargazersCount.setText(queryResultsList.get(position).getStargazersCount());
-            holder.language.setText(queryResultsList.get(position).getLanguage());
+            holder.name.setText("Название: " + queryResultsList.get(position).getName());
+            holder.description.setText("Описание: " + queryResultsList.get(position).getDescription());
+            holder.createdAt.setText("Дата создания: " + queryResultsList.get(position).getCreatedAt());
+            holder.updateAt.setText("Дата обновления: " + queryResultsList.get(position).getUpdateAt());
+            holder.stargazersCount.setText("Количество звезд: " + queryResultsList.get(position).getStargazersCount());
+            holder.language.setText("Язык: " + queryResultsList.get(position).getLanguage());
         }
 
         @Override
@@ -102,4 +132,31 @@ public class ResultActivity extends AppCompatActivity {
             return queryResultsList.size();
         }
     }
+
+    private static Comparator<QueryResults> DateAscending = new Comparator<QueryResults>() {
+        @Override
+        public int compare(QueryResults o1, QueryResults o2) {
+            return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+        }
+    };
+
+    private static Comparator<QueryResults> DateDescending = new Comparator<QueryResults>() {
+        @Override
+        public int compare(QueryResults o1, QueryResults o2) {
+            return o1.getCreatedAt().compareTo(o2.getCreatedAt());
+        }
+    };
+
+    private static Comparator<QueryResults> NameAscending = new Comparator<QueryResults>() {
+        @Override
+        public int compare(QueryResults o1, QueryResults o2) {
+            return o2.getName().compareTo(o1.getName());
+        }
+    };
+    private static Comparator<QueryResults> NameDescending = new Comparator<QueryResults>() {
+        @Override
+        public int compare(QueryResults o1, QueryResults o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
+    };
 }

@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/date_ascending_settings"
+        android:orderInCategory="100"
+        android:title="@string/setting_date_ascending"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/date_descending_settings"
+        android:orderInCategory="100"
+        android:title="@string/setting_date_descending"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/name_ascending_settings"
+        android:orderInCategory="100"
+        android:title="@string/setting_name_ascending"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/name_descending_settings"
+        android:orderInCategory="100"
+        android:title="@string/setting_name_descending"
+        app:showAsAction="never"/>
+</menu>

@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">Github reader</string>
     <string name="button_search">Поиск</string>
-    <string name="textViewTypeRepositories">Тип репозитория:</string>
-    <string name="textViewNameUser">Имя пользователя</string>
-    <string name="textViewLastQuery">Последние запросы:</string>
+    <string name="text_view_type_repositories">Тип репозитория:</string>
+    <string name="text_view_name_user">Имя пользователя</string>
+    <string name="text_view_last_query">Последние запросы:</string>
     <string name="title_result_activity">Repositories</string>
+    <string name="setting_name_ascending">Имя по возрастанию</string>
+    <string name="setting_name_descending">Имя по убыванию</string>
+    <string name="setting_date_ascending">Дата по возрастанию</string>
+    <string name="setting_date_descending">Дата по убыванию</string>
 </resources>
