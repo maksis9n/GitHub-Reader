@@ -35,7 +35,7 @@ import maksis9n.com.test_github_reader.DateBase.QueryHistory_Table;
 import maksis9n.com.test_github_reader.DateBase.QueryResults;
 
 
-public class MainActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
 
     private RecyclerView historyRecyclerView;
     private Button buttonSearch;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         String[] typesRepositories = {"Все", "Владелец", "Участник"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typesRepositories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, typesRepositories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerTypeRepositories = (Spinner) findViewById(R.id.spinner_type_repositories);
@@ -75,14 +75,14 @@ public class MainActivity extends AppCompatActivity {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InitializationData();
-                CreateListRepositories(login, type);
+                initializationData();
+                createListRepositories(login, type);
             }
         });
     }
 
 
-    class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
+    private class retrieveFeedTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             response = "{\"f\":" + response + "}";
             Log.i("INFO", response);
 
-            JSONObject dataJsonObj = null;
+            JSONObject dataJsonObj;
             try {
                 dataJsonObj = new JSONObject(response);
                 JSONArray jsonArray = dataJsonObj.getJSONArray("f");
@@ -132,12 +132,18 @@ public class MainActivity extends AppCompatActivity {
                     queryResults.setStargazersCount(jsonObject.getString("stargazers_count"));
                     queryResults.setLanguage(jsonObject.getString("language"));
                     queryResults.setQueryHistory(queryHistory);
+
+                    JSONObject jsonObjectOwner = jsonObject.getJSONObject("owner");
+                    if(jsonObjectOwner.get("login").toString().equalsIgnoreCase(login))
+                        queryResults.setOwner(true);
+                        else queryResults.setOwner(false);
+
                     queryResults.save();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Intent intent = ResultActivity.newIntent(MainActivity.this, queryHistory.getId());
+            Intent intent = ResultActivity.newIntent(SearchActivity.this, queryHistory.getId());
             startActivity(intent);
         }
 
@@ -147,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void InitializationData() {
+    private void initializationData() {
         login = editTextNameUser.getText().toString();
         selectedItemPosition = spinnerTypeRepositories.getSelectedItemPosition();
 
@@ -167,22 +173,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void NewThread() {
-        InitializationData();
+    private void createNewThread() {
+        initializationData();
         queryHistory = new QueryHistory();
         queryHistory.setNameUser(login);
         queryHistory.setTypeRepository(type);
-        Date curretDate = (Date) Calendar.getInstance().getTime();
+        Date curretDate = Calendar.getInstance().getTime();
         queryHistory.setTimeRequest(curretDate);
         queryHistory.save();
 
         historyRecyclerView.getAdapter().notifyDataSetChanged();
 
-        new RetrieveFeedTask().execute();
+        new retrieveFeedTask().execute();
 
     }
 
-    private void CreateListRepositories(String username, String typeRep) {
+    private void createListRepositories(String username, String typeRep) {
         boolean notFound = true;
         List<QueryHistory> queryHistoryList = new Select()
                 .from(QueryHistory.class)
@@ -190,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 .and(QueryHistory_Table.typeRepository.eq(typeRep))
                 .queryList();
         if (queryHistoryList.size() == 0) {
-            NewThread();
+            createNewThread();
             notFound = false;
         }
 
@@ -202,14 +208,7 @@ public class MainActivity extends AppCompatActivity {
             requestDate = queryHistoryList.get(i).getTimeRequest();
             tmp = ((curretDate.getTime() - requestDate.getTime()) / 1000) / 60;
             if (tmp < 5) {
-                Intent intent = ResultActivity.newIntent(MainActivity.this, queryHistoryList.get(i).getId());
-
-                QueryHistory queryHistoryTmp = new QueryHistory();
-                queryHistoryTmp.setNameUser(queryHistoryList.get(i).getNameUser());
-                queryHistoryTmp.setTypeRepository(queryHistoryList.get(i).getTypeRepository());
-                Date date = (Date) Calendar.getInstance().getTime();
-                queryHistoryTmp.setTimeRequest(date);
-                queryHistoryTmp.save();
+                Intent intent = ResultActivity.newIntent(SearchActivity.this, queryHistoryList.get(i).getId());
 
                 historyRecyclerView.getAdapter().notifyDataSetChanged();
 
@@ -218,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
-        if (notFound) NewThread();
+        if (notFound) createNewThread();
     }
 
     private class HistoryHolder extends RecyclerView.ViewHolder {
@@ -226,10 +225,10 @@ public class MainActivity extends AppCompatActivity {
         private TextView nameUserTextView;
         private TextView typeRepositoriesTextView;
 
-        public HistoryHolder(View itemView) {
+        private HistoryHolder(View itemView) {
             super(itemView);
-            nameUserTextView = (TextView) itemView.findViewById(R.id.list_item_type_repositories);
-            typeRepositoriesTextView = (TextView) itemView.findViewById(R.id.list_item_name_user);
+            nameUserTextView = (TextView) itemView.findViewById(R.id.list_item_name_user);
+            typeRepositoriesTextView = (TextView) itemView.findViewById(R.id.list_item_type_repositories);
         }
     }
 
@@ -237,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public HistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+            LayoutInflater layoutInflater = LayoutInflater.from(SearchActivity.this);
             View view = layoutInflater.inflate(R.layout.list_item_query_history, parent, false);
             return new HistoryHolder(view);
         }
@@ -247,25 +246,32 @@ public class MainActivity extends AppCompatActivity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    QueryHistory tmpHistory = new Select()
-                            .from(QueryHistory.class)
-                            .where(QueryHistory_Table.nameUser.eq(holder.nameUserTextView.getText().toString()))
-                            .and(QueryHistory_Table.typeRepository.eq(holder.typeRepositoriesTextView.getText().toString()))
-                            .querySingle();
-
-                    CreateListRepositories(tmpHistory.getNameUser(), tmpHistory.getTypeRepository());
+                    String tmpTypeRepositories = holder.typeRepositoriesTextView.getText().toString();
+                    if (!tmpTypeRepositories.equals("type")) {
+                        QueryHistory tmpHistory = new Select()
+                                .from(QueryHistory.class)
+                                .where(QueryHistory_Table.nameUser.eq(holder.nameUserTextView.getText().toString()))
+                                .and(QueryHistory_Table.typeRepository.eq(tmpTypeRepositories))
+                                .querySingle();
+                        if (tmpHistory != null)
+                            createListRepositories(tmpHistory.getNameUser(), tmpHistory.getTypeRepository());
+                    }
                 }
             });
-            List<QueryHistory> queryHistory = new Select().from(QueryHistory.class).orderBy(QueryHistory_Table.id, false).limit(2).queryList();
+            List<QueryHistory> queryHistory = new Select()
+                    .from(QueryHistory.class)
+                    .orderBy(QueryHistory_Table.id, false)
+                    .limit(2)
+                    .queryList();
             if (queryHistory.size() == 2) {
-                holder.nameUserTextView.setText(queryHistory.get(position).getNameUser().toString());
-                holder.typeRepositoriesTextView.setText(queryHistory.get(position).getTypeRepository().toString());
+                holder.nameUserTextView.setText(queryHistory.get(position).getNameUser());
+                holder.typeRepositoriesTextView.setText(queryHistory.get(position).getTypeRepository());
             } else if (queryHistory.size() == 1 && position == 0) {
-                holder.nameUserTextView.setText(queryHistory.get(position).getNameUser().toString());
-                holder.typeRepositoriesTextView.setText(queryHistory.get(position).getTypeRepository().toString());
+                holder.nameUserTextView.setText(queryHistory.get(position).getNameUser());
+                holder.typeRepositoriesTextView.setText(queryHistory.get(position).getTypeRepository());
             } else {
-                holder.nameUserTextView.setText("user");
-                holder.typeRepositoriesTextView.setText("type");
+                holder.nameUserTextView.setText(R.string.tmp_name_user);
+                holder.typeRepositoriesTextView.setText(R.string.tmp_type_repositories);
             }
 
         }

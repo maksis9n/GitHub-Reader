@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +30,7 @@ public class ResultActivity extends AppCompatActivity {
     private List<QueryResults> queryResultsList;
 
     private static final String EXTRA_ID =
-            "maksis9n.com.criminalintent.extraid";
+            "maksis9n.com.test_github_reader.extraid";
 
     public static Intent newIntent(Context packagecontext, int extraId) {
         Intent intent = new Intent(packagecontext, ResultActivity.class);
@@ -42,7 +43,9 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         int extraId = (int) getIntent().getSerializableExtra(EXTRA_ID);
 
@@ -55,7 +58,6 @@ public class ResultActivity extends AppCompatActivity {
         resultRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         resultAdapter = new ResultAdapter();
         resultRecyclerView.setAdapter(resultAdapter);
-
     }
 
     @Override
@@ -95,7 +97,7 @@ public class ResultActivity extends AppCompatActivity {
         private TextView stargazersCount;
         private TextView language;
 
-        public ResultHolder(View itemView) {
+        private ResultHolder(View itemView) {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.list_item_name);
@@ -119,12 +121,22 @@ public class ResultActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ResultHolder holder, int position) {
-            holder.name.setText("Название: " + queryResultsList.get(position).getName());
-            holder.description.setText("Описание: " + queryResultsList.get(position).getDescription());
-            holder.createdAt.setText("Дата создания: " + queryResultsList.get(position).getCreatedAt());
-            holder.updateAt.setText("Дата обновления: " + queryResultsList.get(position).getUpdateAt());
-            holder.stargazersCount.setText("Количество звезд: " + queryResultsList.get(position).getStargazersCount());
-            holder.language.setText("Язык: " + queryResultsList.get(position).getLanguage());
+            if (queryResultsList.get(position).isOwner())
+                holder.name.setText(getString(R.string.list_item_title_name)
+                        + queryResultsList.get(position).getName());
+            else
+                holder.name.setText(getString(R.string.list_item_title_name)
+                        + queryResultsList.get(position).getFullName());
+            holder.description.setText(getString(R.string.list_item_title_description)
+                    + queryResultsList.get(position).getDescription());
+            holder.createdAt.setText(getString(R.string.list_item_title_created_at)
+                    + queryResultsList.get(position).getCreatedAt());
+            holder.updateAt.setText(getString(R.string.list_item_title_update_at)
+                    + queryResultsList.get(position).getUpdateAt());
+            holder.stargazersCount.setText(getString(R.string.list_item_title_stargazers_count)
+                    + queryResultsList.get(position).getStargazersCount());
+            holder.language.setText(getString(R.string.list_item_title_language)
+                    + queryResultsList.get(position).getLanguage());
         }
 
         @Override
@@ -136,14 +148,14 @@ public class ResultActivity extends AppCompatActivity {
     private static Comparator<QueryResults> DateAscending = new Comparator<QueryResults>() {
         @Override
         public int compare(QueryResults o1, QueryResults o2) {
-            return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+            return o1.getCreatedAt().compareTo(o2.getCreatedAt());
         }
     };
 
     private static Comparator<QueryResults> DateDescending = new Comparator<QueryResults>() {
         @Override
         public int compare(QueryResults o1, QueryResults o2) {
-            return o1.getCreatedAt().compareTo(o2.getCreatedAt());
+            return o2.getCreatedAt().compareTo(o1.getCreatedAt());
         }
     };
 

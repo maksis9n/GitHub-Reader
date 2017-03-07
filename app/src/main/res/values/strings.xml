@@ -9,4 +9,12 @@
     <string name="setting_name_descending">Имя по убыванию</string>
     <string name="setting_date_ascending">Дата по возрастанию</string>
     <string name="setting_date_descending">Дата по убыванию</string>
+    <string name="tmp_name_user">user</string>
+    <string name="tmp_type_repositories">type</string>
+    <string name="list_item_title_name">Название:</string>
+    <string name="list_item_title_description">Описание:</string>
+    <string name="list_item_title_created_at">Дата создания:</string>
+    <string name="list_item_title_update_at">Дата обновления:</string>
+    <string name="list_item_title_stargazers_count">Количество звезд:</string>
+    <string name="list_item_title_language">Язык:</string>
 </resources>

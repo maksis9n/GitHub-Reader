@@ -41,6 +41,9 @@ public class QueryResults extends BaseModel {
     @ForeignKey
     QueryHistory queryHistory;
 
+    @Column
+    boolean owner;
+
     public int getId() {
         return id;
     }
@@ -107,5 +110,13 @@ public class QueryResults extends BaseModel {
 
     public void setQueryHistory(QueryHistory queryHistory) {
         this.queryHistory = queryHistory;
+    }
+
+    public boolean isOwner() {
+        return owner;
+    }
+
+    public void setOwner(boolean owner) {
+        this.owner = owner;
     }
 }
